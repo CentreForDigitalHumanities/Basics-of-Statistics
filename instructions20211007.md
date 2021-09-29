@@ -17,7 +17,7 @@ We kindly ask you to do a COVID19 self-test no older than 48 hours, and to check
 
 There will be 16 participants, and not enough computers in the room, so we kindly ask you to bring your own laptop computer. Essential software needs to be installed on the laptop BEFORE the training, so read on. 
 
-## Software 
+## Install software 
 
 1. Install R from <https://www.R-project.org> (Download, full installation for your computer)
 
@@ -38,7 +38,7 @@ There will be 16 participants, and not enough computers in the room, so we kindl
    <https://github.com/UtrechtUniversity/workshop-introduction-to-R-and-data/blob/master/installation.md>
 
 
-## Self-study materials
+## Read materials
 
 * Before the training, have a look at this document, which contains a brief intro into R:   
    <https://hugoquene.github.io/emlar2020>
@@ -47,7 +47,7 @@ There will be 16 participants, and not enough computers in the room, so we kindl
    <https://hugoquene.github.io/QMS-EN>
 
 
-## Materials during the training
+## Find materials during the training
 
 We are still busy preparing some files that we will use during the training. These files will be available in the repository at   
 <https://github.com/hugoquene/CDH-BOS>.
