@@ -1,6 +1,7 @@
 # R commands to prepare your local R + Rstudio installation
 # for various basic or advanced R tutorials
 # Hugo Quené, h.quene@uu.nl
+#
 # version 0.2, 20200415: EMLAR 2020
 # version 0.3, 20210401: EMLAR 2021, typo fixed
 ## these versions are at https://www.hugoquene.nl/emlar/
@@ -9,9 +10,9 @@
 ## current version is at https://github.com/hugoquene/CDH-BOS/BOS20211007prepare.R
 # 
 # Usage: 
-# Go to Console window, by clicking Console tab in lower left window of RStudio. 
+# Go to Console window, by clicking Console tab in lower left panel of RStudio. 
 # Then do any of these options:
-# 1. copy and paste all lines below  into the Console window 
+# 1. copy and paste all lines below into the Console panel 
 # 2.  (a) download this file into a local folder, 
 #     (b) open this downloaded file in RStudio,
 #     (c) `Source` this open file (button Source in top of panel)
