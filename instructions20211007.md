@@ -23,15 +23,18 @@ There will be 16 participants, and not enough computers in the room, so we kindl
 
 2. Install RStudio from <https://www.Rstudio.com> (Download, Desktop Free version for your computer)
 
-3. Create a separate folder on your computer for this training, e.g. C:\\Hugo\\BOS2021 (Windows) or ~/Hugo/BOS2021 (Mac).
+3. Create a separate folder on your computer for this training, e.g. C:\\Hugo\\BOS (Windows) or ~/Hugo/BOS (Mac).
 
-4. Start RStudio. The program will show four panels, each with multiple tabs. Go to the lower left panel, and click on the Console tab. 
+4. Start RStudio. The program will show three or four panels, most of which have multiple tabs.  
 
-5. In the Console panel, copy+paste the following command after the ">" prompt:   
-   _source(file=url("https://github.com/hugoquene/CDH-BOS/BOS20211007prepare.R"))_   
-This script will install additional packages in R, and will report details of your installation. The script will produce output in the same Console panel. Regular output is in black, warnings and errors are in red. 
+5. Download the following R script and save it in the folder you have prepared in step 3 above:   
+   <https://github.com/hugoquene/CDH-BOS/BOS20211007prepare.R>
 
-6. If you are using a UU laptop, and if you encounter problems while installing R or RStudio or the additional packages (step 5), then please consult the following troubleshooting guide:   
+6. In RStudio, open the file you have saved in step 5 above (File, Open File...). The file will open in the top left panel of RStudio. 
+
+7. In RStudio, go to the top left panel (where the R script is visible). Click on the word "Source" in the upper border. The R script will be "run" or executed from the source code in the file. This will install additional packages in R, and will report details of your installation. The script will produce output in the Console panel (lower left). Regular output is in black, warnings and errors are in red. 
+
+8. If you are using a UU laptop, and if you encounter problems while installing R or RStudio or the additional packages (step 5), then please consult the following troubleshooting guide:   
    <https://github.com/UtrechtUniversity/workshop-introduction-to-R-and-data/blob/master/installation.md>
 
 
