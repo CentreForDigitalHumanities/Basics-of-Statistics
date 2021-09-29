@@ -27,8 +27,11 @@ There will be 16 participants, and not enough computers in the room, so we kindl
 
 4. Start RStudio. The program will show three or four panels, most of which have multiple tabs.  
 
-5. Download the following R script and save it in the folder you have prepared in step 3 above:   
-   <https://github.com/hugoquene/CDH-BOS/BOS20211007prepare.R>
+5. Files to be used during the course are in this repository:   
+   <https://github.com/hugoquene/CDH-BOS>.   
+   Download the file _BOS20211007prepare.R_ from that repository (its full URL should be
+   <https://github.com/hugoquene/CDH-BOS/blob/main/BOS20211007prepare.R>. 
+   Save this R script in the folder you have prepared in step 3 above.   
 
 6. In RStudio, open the file you have saved in step 5 above (File, Open File...). The file will open in the top left panel of RStudio. 
 
