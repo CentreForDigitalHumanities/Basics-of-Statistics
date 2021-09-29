@@ -5,14 +5,16 @@
 # version 0.3, 20210401: EMLAR 2021, typo fixed
 ## these versions are at https://www.hugoquene.nl/emlar/
 # version 0.4, 20210928: CDH tutorial (20211007) Basics of Statistics
-## this version is at https://github.com/hugoquene/CDH-BOS/blob/main/BOS20211007prepare.R
+## Note: `source(file=url("https://github.com/hugoquene/...))` does not work
+## current version is at https://github.com/hugoquene/CDH-BOS/BOS20211007prepare.R
 # 
 # Usage: 
 # Go to Console window, by clicking Console tab in lower left window of RStudio. 
 # Then do any of these options:
-# 1. copy and paste all lines into the Console window 
-# 2. copy and paste the following line WITHOUT the initial hashtag:
-#    source(file=url("https://github.com/hugoquene/CDH-BOS/blob/main/BOS20211007prepare.R"))
+# 1. copy and paste all lines below  into the Console window 
+# 2.  (a) download this file into a local folder, 
+#     (b) open this downloaded file in RStudio,
+#     (c) `Source` this open file (button Source in top of panel)
 #
 # ----
 # Preparation starts here: 
