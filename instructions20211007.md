@@ -1,5 +1,7 @@
 # CDH training on Basics of Statistics
 
+version 29 September 2021 
+
 Dear participants, 
  
 Thanks for participating in the tutorial on Basics of Statistics. Below we provide some additional information about the location, about COVID measures, about software that you need to install, reading materials, and more. 
@@ -37,7 +39,7 @@ There will be 16 participants, and not enough computers in the room, so we kindl
 
 7. In RStudio, go to the top left panel (where the R script is visible). Click on the word "Source" in the upper border. The R script will be "run" or executed from the source code in the file. This will install additional packages in R, and will report details of your installation. The script will produce output in the Console panel (lower left). Regular output is in black, warnings and errors are in red. 
 
-8. If you are using a UU laptop, and if you encounter problems while installing R or RStudio or the additional packages (step 5), then please consult the following troubleshooting guide:   
+8. If you are using a UU laptop, and if you encounter problems while installing R or RStudio or the additional packages (step 5-6-7), then please consult the following troubleshooting guide:   
    <https://github.com/UtrechtUniversity/workshop-introduction-to-R-and-data/blob/master/installation.md>
 
 
@@ -63,10 +65,12 @@ The schedule will be approximately as follows:
 * 10:00-11:00  session 1, lecture (KS)   
 * 11:10-11:15  break   
 * 11:15-12:45  session 2, R session (HQ)   
-* 12:45-13:30  lunch   
+* 12:45-13:30  lunch   (will be provided)
 * 13:30-14:30  session 3, lecture (HQ)   
 * 14:30-14:45  break   
 * 14:45-16:00  session 4, R session (KS)   
+
+Coffee, tea and lunch will be provided. 
 
 ## DCU compensation
 
