@@ -1,6 +1,6 @@
 # CDH training on Basics of Statistics
 
-version 29 September 2021 
+version 30 September 2021 
 
 Dear participants, 
  
