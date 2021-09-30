@@ -59,18 +59,23 @@ We are still busy preparing some files that we will use during the training. The
 
 ## Schedule
 
-The schedule will be approximately as follows:
+The schedule will be approximately as follows. Note that the course will run until 16:30 (not 16:00 as indicated earlier) in order to allow for a longer lunch break.
 
 * 09:30-10:00  walk-in, setup   
 * 10:00-11:00  session 1, lecture (KS)   
-* 11:10-11:15  break   
+* 11:00-11:15  break   
 * 11:15-12:45  session 2, R session (HQ)   
-* 12:45-13:30  lunch   (will be provided)
-* 13:30-14:30  session 3, lecture (HQ)   
-* 14:30-14:45  break   
-* 14:45-16:00  session 4, R session (KS)   
+* 12:45-13:45  lunch
+* 13:45-14:45  session 3, lecture (HQ)   
+* 14:45-15:00  break   
+* 15:00-16:30  session 4, R session (KS)   
 
 Coffee, tea and lunch will be provided. 
+
+## Recordings
+
+Video recordings and still photos will be made during the day, for promotional materials. 
+If you do not wish to be photographed or recorded, then please inform the photographer / videographer.  
 
 ## DCU compensation
 
@@ -78,7 +83,7 @@ This paragraph only applies to academic teaching staff in the Faculty of Humanit
 
 ## Cancellation
 
-If you are unable to attend, then please cancel your registration by sending an email to <CDH@uu.nl>, so that we can place another participant from the waiting list in your spot. 
+If you are unable to attend, then please cancel your registration by sending an email to <CDH@uu.nl>, so that we can give your spot to another participant from the waiting list. 
 
 ---
 
