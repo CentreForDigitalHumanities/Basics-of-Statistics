@@ -54,7 +54,7 @@ There will be 16 participants, and not enough computers in the room, so we kindl
 
 ## Find materials during the training
 
-We are still busy preparing some files that we will use during the training, links to these files are in the schedule below. 
+The files that we will use during the training are listed in the schedule below. 
 These files are available for download in the repository at <https://github.com/hugoquene/CDH-BOS>.
 Download and save the files in your folder for this training day. 
 
@@ -63,13 +63,13 @@ Download and save the files in your folder for this training day.
 The schedule will be approximately as follows. Note that the course will run until 16:30 (not 16:00 as indicated earlier) in order to allow for a longer lunch break. 
 
 * 09:30-10:00  walk-in, setup   
-* 10:00-11:00  **session 1: lecture** (KS) 
+* 10:00-11:00  **session 1: lecture** (KS); [sheets 1](SessionOne.pdf)
 * 11:00-11:15  break   
 * 11:15-12:45  **session 2: R session** (HQ); [Rmarkdown 2](SessionTwo.Rmd)  
 * 12:45-13:45  lunch
 * 13:45-14:45  **session 3: lecture** (HQ); [sheets 3](SessionThree.pdf)
 * 14:45-15:00  break   
-* 15:00-16:30  **session 4: R session** (KS); [Rmarkdown 4](SessionFour.Rmd) [Rmarkdown 5](SessionFive.Rmd)
+* 15:00-16:30  **session 4: R session** (KS); [Rmarkdown 4](SessionFour.Rmd); [Rmarkdown 5](SessionFive.Rmd)
 
 
 Coffee, tea and lunch will be provided. 
