@@ -65,11 +65,11 @@ The schedule will be approximately as follows. Note that the course will run unt
 * 09:30-10:00  walk-in, setup   
 * 10:00-11:00  **session 1: lecture** (KS) 
 * 11:00-11:15  break   
-* 11:15-12:45  **session 2: R session** (HQ); [Rmarkdown 2](~./SessionTwo.Rmd)  
+* 11:15-12:45  **session 2: R session** (HQ); [Rmarkdown 2](SessionTwo.Rmd)  
 * 12:45-13:45  lunch
-* 13:45-14:45  **session 3: lecture** (HQ); [sheets 3](~./SessionThree.pdf)
+* 13:45-14:45  **session 3: lecture** (HQ); [sheets 3](SessionThree.pdf)
 * 14:45-15:00  break   
-* 15:00-16:30  **session 4: R session** (KS); [Rmarkdown 4](~./SessionFour.Rmd) [Rmarkdown 5](~./SessionFive.Rmd)
+* 15:00-16:30  **session 4: R session** (KS); [Rmarkdown 4](SessionFour.Rmd) [Rmarkdown 5](SessionFive.Rmd)
 
 
 Coffee, tea and lunch will be provided. 
