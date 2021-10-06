@@ -1,0 +1,255 @@
+---
+title: "Basics of Statistics: Session Four"
+author: "Kirsten Schutter, k.schutter@uu.nl"
+date: "`r Sys.Date()`"
+output:
+  #pdf_document: default
+  html_document: default
+encoding: UTF-8
+---
+
+```{r setup, include=FALSE}
+```
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+In session three we have discussed the association between variables, and that you can test hypotheses about associations using statistical models.
+
+In this session we are going to test some hypotheses ourselves. We will be using the `students` data. Remember how to get this data?
+
+```{r read-table}
+students <- read.csv( file=url("https://www.hugoquene.nl/R/students.csv") )
+```
+
+First, let's take a closer look at the data.
+
+```{r inspect students-data}
+class(students) # gives the type of the data
+str(students) # shows the structure of the variables
+```
+We now know that `students` is a data matrix of the class `data frame`, There are 115 observations and 5 variables of which two integer variables (`group` and `siblings`), one character variable (`sex`), and two numerical variables (`height` and `shoesize`).
+
+It is useful to transform the variable `sex` into a categorical (factor) variable.
+
+```{r}
+students$sex <- as.factor(students$sex)
+```
+
+
+When we look at the structure again, we see `sex` is now a factor variable. It also show's it has two levels: `male` and `female`.
+
+```{r}
+str(students)
+```
+
+# T-test
+
+Let's say we have a hypothesis about men and women having different shoe sizes. We can test this with a t-test. A t-test is used when your dependent variable (DV) is measured on a continuous scale and your independent variable (IV) is a categorical variable with two levels (groups).
+
+
+### Inspect variables
+
+Let's take a closer look at the variables in our hypothesis: `shoesize` and `sex`.
+
+```{r summary shoesize}
+summary(students$shoesize)
+summary(students$sex)
+
+```
+Since `shoezise` is a continuous (numerical) variable, the `summary` command gives different information then for the categorical variable `sex`. 
+
+Note that males and females are not equally represented in this sample. This is not ideal. When you design a study where you want to compare groups you should always aim to have approximately equal groups.
+
+From the `summary` of `shoesize` we can see that there are at least two unlikely values; the minimum and the maximum value for `shoesize`. Although a shoe size of 28 might be possible for a very small person, a shoe size of 140 doesn't exist.
+
+Let's further inspect this variable to see if there are any other unlikely values between 28 and 140.
+
+```{r}
+plot(students$shoesize) 
+```
+
+Do you see any other *outliers*?
+
+The subject with shoe size 28 has an index number between 40 and 50 (see x-axis). Let's inspect if this subject also has a low value for height.
+
+```{r}
+students[40:50,] # shows the data in row 40 to 50
+```
+ The observed shoe size of 28 is observed for subject 45. Her height is 175cm. Does this seem to make sense?
+ 
+ We can also see that subject 49 is the one with the impossible value of 140.
+ 
+ Before we go on with our T-test we remove the subjects with the unlikely values.
+ 
+```{r}
+students <- students[-c(45, 49),] # remove row 45 and 49 and store it in the existing 'students' object. NOTE this overwrites the original data!
+```
+ 
+Now, let's see if this worked correctly by checking the dimensions of `students`
+```{r}
+dim(students)
+```
+What changed in the dimensions here?
+
+### Check assumptions
+Every statistical test has some underlying assumptions.For the t-test there are two assumptions:
+
+* the sample distribution is normally distributed
+* variances in both groups are roughly equal (homogeneity of variance)
+
+
+First, let's check whether the DV is normally distributed (see Session Two). What do you conclude?
+
+
+```{r Check for normality}
+```
+
+
+Second, let's test the homogeneity of variances. We use the *Levene's Test* to check for homogeneity of variances. This function is within the `car` package.
+```{r}
+require(car) # loads the `car` package
+```
+
+If this package is not installed yet you will get a warning message. In that case: install the package.
+
+```{r Install `car` package}
+install.packages("car")
+```
+
+Levene's test uses the following hypotheses:
+
+* Null hypothesis (H0): the variances of the two groups are equal.
+* Alternative hypothesis (Ha): the variances are different.
+
+
+```{r check for homogeneighty of variances with Levens test}
+leveneTest(shoesize ~ sex, data=students)
+```
+Interpretation: The p-value is p = .256 which is greater than the alpha level .05. In conclusion, there is no significant difference between the two variances.
+
+
+### Statistical test
+
+Now we can run our t-test. The hypotheses are:
+
+* H0: there are no differences between males and females shoe sizes.
+* Ha: males and females shoe sizes are different. 
+
+
+```{r T-test}
+t.test(shoesize ~ sex, data=students, var.equal=T)
+```
+Use the help function to see what the arguments in the function mean.
+
+The output of the t-test shows us the average shoe size per group: Males have an average shoe size of 42.9 and females an average shoe size of 39.7. They seem to be different, but is the difference statistically significant (i.e. is the difference greater then 0)? Let's look at the test statistic *t*, degrees of freedom (df) and the probability value (p-value). What do we conclude?
+
+The results from this t-test show that on average, woman's shoe sizes (M=38.7) differ significantly from man's shoe sizes (M=42.9) (*t*(111)=-11.128, *p* < .001).
+
+We have found a statistically significant effect, but is the effect also relevant? For this we need to know the magnitude of the effect. We can calculate the effect size Cohen's D.
+
+```{r}
+s_pooled <- function( y1, y2 ) {
+  d1 <- y1[!is.na(y1)]
+  d2 <- y2[!is.na(y2)]
+  n1 <- length(d1)
+  n2 <- length(d2)
+  sd1 <- sd(d1)
+  sd2 <- sd(d2)
+  return( sqrt(  ( (n1-1)*sd1^2 + (n2-1)*sd2^2) / (n1+n2-2) ) )
+}
+
+
+cohen_d <- function( y1, y2 ) {
+  d1 <- y1[!is.na(y1)]
+  d2 <- y2[!is.na(y2)]
+  return( (mean(d1)-mean(d2))/(s_pooled(d1,d2)) )
+}
+```
+
+
+
+```{r}
+y1 <- students[ students$sex=="Male", 4 ] # select shoe size values of males and store in object y1
+y2 <- students[ students$sex!="Male", 4 ] # select shoe size values of females and store in object y2
+
+
+s_pooled(y1, y2)
+cohen_d(y1, y2)
+
+```
+
+
+## Correlation
+
+We also have a hypothesis about the association between height and shoe size. Taller subjects will have larger shoe sizes. Both `height` and `shoesize` are measured on a continuous scale. Therefor We can test whether there is a (positive) relation between `height` and `shoesize` using Pearson Correlation.
+
+We had already inspected the variable shoe size, now inspect the variable height (see Session Two) and remove the outlier(s).
+
+
+```{r Remove outliers}
+
+```
+
+
+Before we do a correlation test we look at the data by making a graphical presentation of the relationship between `height` and `shoesize`.
+
+```{r}
+plot(students$height, students$shoesize)
+```
+
+Every dot represents one subject's height (X-axis) and shoe size (Y-axis). Looking at the dots in this graph we can see a positive trend in the data. To test whether this trend is a significant relationship we run a correlation test using the `cor.test` function. Use the help function to see how to use `cor.test`.
+
+
+```{r}
+cor.test(students$height, students$shoesize, alternative="greater", method="pearson")
+```
+
+From the results we can conclude that there is a positive correlation (*r* = .77) and that this correlation is significantly different from 0 (*p* < .001). Therefor we reject the the null hypothesis which states that there is no relationship between height and shoe size.
+
+Now we know that there is a positive relationship, it would also be very informative to know how strong this relationship is. 
+
+## Linear regression
+
+The basis of a regression model is the following formula:  $Y = \alpha + \beta X + \epsilon$.  
+$\alpha$ represents the intercept; the mean value of $Y$ when $X$ is zero. $\beta$ represents the regression coefficient; the rate of increase/decrease of Y for every unit increase of $X$, $X$ represents the predictor variable, and $\epsilon$ is the random error.. 
+
+
+#### Intercep-only model
+
+First we run an intercept only model. This is the model without any predictors.
+
+```{r}
+m0 <- lm(shoesize ~ 1, data=students)
+summary(m0)
+```
+We can see here that the value of the intercept is equal to the sample mean of shoe size.
+
+```{r}
+mean(students$shoesize)
+```
+
+
+#### Adding a predictor
+
+To inspect the effect of height we add it to the intercept-only model.
+
+```{r}
+m1 <- lm(shoesize ~ height, data=students)
+summary(m1)
+```
+When we add the predictor `height` to the model the value of the intercept changes. It is the (theoretical) mean value of `shoesize` when `height` is zero. Below the intercept we can find the regression coefficient for `height`. For every unit increase of `height` shoesize will increase by 0.21. When we look at the belonging p-value, what can we conclude?
+
+Now, take a look at this plot to see how we can visually explain the parameter estimates from this regression model.
+
+```{r}
+require(ggplot2)
+ggplot(students, aes(x=height, y=shoesize)) + geom_point(size=2) +
+  geom_smooth(method=lm, se=FALSE)
+```
+
+
