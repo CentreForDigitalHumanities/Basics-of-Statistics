@@ -1,6 +1,6 @@
 # CDH training on Basics of Statistics
 
-version 30 September 2021 
+version 6 October 2021 
 
 Dear participants, 
  
@@ -89,7 +89,7 @@ If you are unable to attend, then please cancel your registration by sending an 
 
 ---
 
-We look forward to see you next week! 
+We look forward to see you soon! 
 
 With kind regards, 
 
