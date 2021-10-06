@@ -1,0 +1,91 @@
+---
+title: 'Basics of Statistics: Session Five'
+author: "Hugo Quen&eacute;, h.quene@uu.nl, www.hugoquene.nl"
+date: "`r Sys.Date()`"
+output:
+#  pdf_document: default
+  html_document: default
+encoding: UTF-8
+---
+
+```{r set-options, include=FALSE}
+# only relevant when knitting the document
+options(width = 80)
+knitr::opts_chunk$set(
+  cache = FALSE,
+  comment = NA,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+## Introduction
+
+In previous sessions, we have inspected and analyzed the relation between variables, in situations where one of the variables was of the interval or ratio measurement level. We could however also analyse relations between two _categorical_ variables.
+
+Background text for this brief session may be found in 
+https://hugoquene.github.io/QMS-EN/ch-chi-square-tests.html
+
+In this session we will be using the `students` data. 
+Remember how to retrieve those data?
+
+```{r read-table}
+# students <- read.csv( file=url("https://www.hugoquene.nl/R/students.csv") )
+students <- read.csv( file="./students.csv")
+```
+
+The hypothesis to be tested is:
+
+H_0: There is no association between the students' number of siblings, and sex. (In jargon: the relative frequencies of numbers of siblings are equal for male and female students; the variables are independent and are not associated.)
+
+H_a: There is an association between the students' number of siblings, and sex. (In jargon: the relative frequencies of numbers of siblings are not equal for male and female students; the variables are not independent and are associated.)
+
+## Counts
+
+First, let's inspect the numbers of siblings, broken down for the two sexes, in a cross-table (dimension 1 is rows, dimension 2 is columns):
+
+```{r crosstabs}
+with(students, table(sex,siblings) )
+```
+
+There are far more Female than Male students in this dataset, and that is why we work with the _relative_ frequencies. 
+
+Because of the low counts in many of the cells, we will merge some cells together.
+Here we will merge the counts manually --- and drastically. 
+We will only distinguish between 0 or 1 sibling in one group, and 2 or more siblings in the other group. The new table is constructed using R code from the `help` info for `chisq.test`):
+
+```{r counts}
+counts <- as.table( rbind( c( 4+19, 29+13+5+1),
+                           c(  2+9,  4+2+0+0 ) ) )
+dimnames(counts) <- list(sex = c("Female", "Male"),
+                    siblings = c("ZeroOne","TwoMore"))
+print(counts)
+```
+
+Hence we have reduced the `siblings` variable from a ratio measurement level to an ordinal measurement level. 
+
+What is the H0 for this new table, using only two sexes and two categories of the `sibling` variable?
+
+The new table suggests that the majority of female students have two or more siblings, while only a minority of male students are in that category. In other words, female students may come from larger families than male students. 
+
+## Test
+
+Without going into all the details, we will use the so-called $\chi^2$ ("chi square") statistical test for independence of the two categorical variables involved: 
+
+```{r chi2}
+chisq.test( counts ) -> counts.ht # store test result in object
+print(counts.ht) # print object
+```
+
+This suggests that the difference (between sexes) in their distribution over the two categories of the (recoded) sibling variable, may not be accidental.  There is only a low probability (p=.029, smaller than $\alpha=.05$) to observe this value of the $\chi^2$ test statistic, or larger, if H0 is true. 
+
+We may report this finding as follows: 
+
+> Relative to female students, fewer male students report having two or more siblings ($\chi^2(1)=4.75, p=.029$).
+
+> Respondents reporting two or more siblings are significantly more of the female than of the male sex ($\chi^2(1)=4.75, p=.029$).
+
+(To the expert reader, the single degree of freedom, reported in parentheses, indicates that only two categories were used for the number of siblings.)
+
+---
+
