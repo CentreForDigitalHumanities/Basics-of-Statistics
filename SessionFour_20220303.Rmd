@@ -1,0 +1,395 @@
+---
+title: "Basics of Statistics: Session Four"
+author: "Kirsten Schutter and Hugo Quené"
+date: "`r Sys.Date()`"
+output:
+  #pdf_document: default
+  html_document: default
+encoding: UTF-8
+---
+
+```{r setup, include=FALSE}
+```
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+In session three we have discussed the association between variables, and that you can test hypotheses about associations using statistical models.
+
+In this session we are going to test some hypotheses ourselves. We will be using the `students` data. 
+
+You have loaded this data set in Session Two, exercise 2-2. 
+
+```{r read-table}
+# for knitting, the full command is given here! 
+students <- read.csv(
+  file=url("https://www.hugoquene.nl/R/students.csv") )
+```
+
+First, let's take a closer look at the data.
+
+```{r inspect students-data}
+class(students) # gives the type of the data
+str(students) # shows the structure of the variables
+```
+We now know that `students` is a data matrix of the class `data frame`, There are 115 observations and 5 variables of which two integer variables (`group` and `siblings`), one character variable (`sex`), and two numerical variables (`height` and `shoesize`).
+
+It is useful to transform the variable `sex` into a categorical (factor) variable.
+
+```{r}
+students$sex <- as.factor(students$sex)
+```
+
+When we look at the structure again, we see that `sex` is now a factor variable, with two levels: `Female` and `Male` (in alphabetical order).
+
+```{r}
+str(students)
+```
+
+# *t* test
+
+For the sake of argument, and demonstration, we will hypothesize that men and women have (or self-report) different shoe sizes. This is our research hypothesis. The null hypothesis claims the opposite, viz. that men and women do not have different shoe sizes. We will test the null hypothesis in two-sided fashion, and a priori we have set the risk of a Type I error at $\alpha=.05$ (false rejection of H0). 
+
+We can test for the difference between two groups with a *t* test for two independent samples. For more background, see 
+https://hugoquene.github.io/QMS-EN/ch-testing.html#sec:ttest-indep (§13.6). 
+
+
+## Inspect and clean variables
+
+Let's take a closer look at the variables in our hypothesis: `shoesize` and `sex`.
+
+```{r summary shoesize}
+summary(students$shoesize)
+summary(students$sex)
+```
+
+Since `shoezise` is a continuous (numerical) variable, the `summary` command provides different information than for the categorical variable `sex`. 
+
+Note that the numbers of female and male participants are *not* equal (not even nearly equal) in this sample. (Note: If the purpose of your study is to compare compare groups, then you *should* aim for groups of approximately equal size). 
+
+The `summary` of `shoesize` shows that there are at least two unlikely values: the minimum and the maximum value for `shoesize`. Although a shoe size of 28 might be possible for a very small person, a shoe size of 140 does not even exist.
+
+Let's further inspect this variable to see if there are any other unlikely values between 28 and 140.
+
+```{r}
+plot(students$shoesize) 
+```
+
+Do you see any other *outliers*?
+
+The subject with shoe size 28 has an index number between 40 and 50 (along the X axis). Let's inspect whether this subject also has a low value for height.
+
+```{r}
+students[40:50,] # shows the data in row 40 to 50
+```
+ The observed shoe size of 28 is observed for subject 45. Her height is 175 cm. Does this seem to make sense?
+ 
+We can also see that subject 49 is the one with the impossible value of 140.
+ 
+Before we proceed with our statistical test, the *t* test, we remove the subjects with the unlikely values.
+ 
+```{r}
+# remove rows 45 and 49, store the result in `students`;
+# note that this OVERWRITES the original contents of `students`!
+students <- students[ -c(45,49), ] # minus two rows, all columns
+```
+ 
+Now, let's see how this worked, by checking the dimensions of `students` again. 
+```{r}
+dim(students)
+```
+What changed in the dimensions here?
+
+## Check assumptions
+
+Every statistical test requires some underlying statistical assumptions.
+For the *t* test there are three assumptions:
+
+* the data have a normal (gaussian) sampling distribution;
+
+* the variances in both groups are approximately equal (homogeneity of variance);
+
+* the observations are independent (i.e., sampling errors are not correlated).
+
+### Exercise 4.1 Check for normality
+
+First, let's check the first assumption, whether the DV is indeed normally distributed (see Session Two). What do you conclude?
+
+```{r qqnorm}
+qqnorm( students$shoesize, datax=T ) 
+qqline( students$shoesize, datax=T, col="purple", lwd=2, lty=2 )
+```
+```{r}
+with(students, hist( shoesize,
+                     breaks=nclass.FD, 
+                     xlab="Shoe size (EU)", # axes must always be labeled
+                     main="Students' shoe size (N=113)" ) ) -> students.hist
+curve( dnorm(x, mean=mean(students$shoesize),
+             sd=sd(students$shoesize) ) * 113*1, # multiply by N * binwidth
+       add=TRUE, lty="dashed", col="purple", lwd=2 )
+with(students, boxplot( shoesize, horizontal=TRUE,
+                        outpch=16, outcol="red", outcex=2, # highlight outliers
+                        xlab="Shoe size (EU)" ) ) -> students.boxplot # save results
+# add explanatory text 
+text( students.boxplot$stats[1,1], 0.8, "lower\nwhisker", adj=0.5 )
+text( students.boxplot$stats[2,1], 1.3, "Q1", adj=0.5 )
+text( students.boxplot$stats[3,1], 0.7, "Q2\nmedian", adj=0.5 )
+text( students.boxplot$stats[4,1], 1.3, "Q3", adj=0.5 )
+text( students.boxplot$stats[5,1], 0.8, "upper\nwhisker", adj=0.5 )
+```
+
+Second, let's check the second assumption, whether the variance is homogeneous (approximately equal) in the two groups. We use the *Levene's Test* to check for homogeneity of variances. This function is available in the `car` package.
+```{r}
+require(car) # loads the `car` package
+```
+
+If this package is not installed yet you will receive a warning message. In that case, you will have to install the `car` package first.
+
+```{r install}
+# remove comment symbol from next line, if you need to install `car` package
+# install.packages("car")
+require(car) # loads the `car` package
+```
+
+Levene's test uses the following hypotheses:
+
+* Null hypothesis (H0): the variances of the two groups are equal.
+* Alternative hypothesis (Ha): the variances are different.
+
+```{r leveneTest}
+leveneTest( shoesize ~ sex, data=students )
+```
+This indicates that there is no compelling evidence to reject the H0. The probability of finding this difference in variance, or a larger difference, if H0 is true, is $p=.26$. We may safely assume that the variances in the two groups are indeed approximately equal. 
+
+
+## Statistical test
+
+After all these preliminaries we can finally run our *t* test. 
+
+The critical, first argument is the **model** tested here. By definition of the *t* test, there is a single explanatory variable (`sex`) which defines exactly two groups in the data set; `shoesize` is the dependent variable, and the variances of `shoesize` in the two groups are indeed assumed to be equal. 
+
+```{r t-test}
+t.test( shoesize ~ sex, data=students, var.equal=TRUE )
+```
+
+The output of the *t* test shows us the average shoe size per group: 
+Females have an average shoe size of 38.7 and males an average shoe size of 42.9, in these samples. The shoe sizes seem to differ between groups, but is the difference statistically significant -- is the chance of finding this difference (or a larger one) smaller than the chosen $\alpha=.05$? 
+The chance of finding this difference (or a larger one) is reported on my computer as $p < 2.2 * 10^(-16)$ which is indeed very small. The chance depends on the value of *t* (which in turn depends on the difference between the groups and on the pooled standard deviation) and on the numbers of observations (degrees of freedom). What do we conclude?
+
+We may report this as follows:
+
+>Female students' shoe sizes $(M=38.7, n=21)$ differ significantly from those of male students $(M=42.9, n=92)$, $t(111)=-11.12, p<.001$, pooled $s=1.56$. 
+
+We have found a statistically significant effect, but is the effect also relevant? For this we need to know the magnitude of the effect. We can calculate the effect size expressed as *Cohen's d*. To obtain that effect size, we need some auxiliary functions that we will not explain here. 
+
+```{r}
+s_pooled <- function( y1, y2 ) {
+  d1 <- y1[!is.na(y1)]
+  d2 <- y2[!is.na(y2)]
+  n1 <- length(d1)
+  n2 <- length(d2)
+  sd1 <- sd(d1)
+  sd2 <- sd(d2)
+  return( sqrt( ( (n1-1)*sd1^2 + (n2-1)*sd2^2) / (n1+n2-2) ) )
+}
+
+cohen_d <- function( y1, y2 ) {
+  d1 <- y1[!is.na(y1)]
+  d2 <- y2[!is.na(y2)]
+  return( (mean(d1)-mean(d2))/(s_pooled(d1,d2)) )
+}
+```
+
+
+```{r}
+y1 <- students[ students$sex=="Male", 4 ] # select shoe size values of males and store in object y1
+y2 <- students[ students$sex!="Male", 4 ] # select shoe size values of females and store in object y2
+
+s_pooled( y1, y2 )
+cohen_d( y1, y2 )
+```
+
+The effect size of $d=2.7$ is very large: the difference is even visible to the naked eye, and without statistics. 
+Often we study phenomena with far smaller effect sizes, e.d. $d=0.5$ or smaller, for which we reallyt need statistics to discern the effect (signal) from the background noise.   
+
+
+# Correlation
+
+We also hypothesize that students' height and shoe size are related. Taller students tend to have larger shoe sizes as well. Both `height` and `shoesize` are measured on a continuous scale. Therefore We can test whether there is a (positive) relation between `height` and `shoesize` using Pearson Correlation.
+
+## Exercise 4.2 Inspect the variable `height`
+
+We have already inspected the variable `shoesize`, now inspect the variable `height`. 
+Remove any outlier(s).
+
+```{r}
+# your R code goes here
+students <- students[ -23, ] # for knitting
+```
+
+## Visual inspection
+
+Before we perform a correlation test, we must *always* inspect the correlation visually, in a so-called scatterplot, where the two variables constitute the coordinates. 
+(Remember Anscombe's illustration of misleading correlations, in Session Three!)
+
+```{r scatter}
+plot( students$height, students$shoesize,
+      xlab="Height (cm)", ylab="Shoe size (EU)")
+```
+
+Every dot represents one student's height (X axis) and shoe size (Y axis). (Note that dots may fully overlap each other without us noticing, in this scatterplot.)
+Looking at the dots in this graph we may see a positive trend in the data: as X increases, so increases Y). 
+To test whether this trend is significant, we run a correlation test using the `cor.test` function. In a correlation test, a correlation coefficient *r* is computed (this expresses the trend and amount of correlation, between -1 and +1). The H0 is that $r=0$. 
+
+```{r}
+cor.test( students$height, students$shoesize,
+          alternative="greater", method="pearson")
+# help(cor.test) for more information
+```
+
+From the results we may conclude that there is a positive correlation ($r = .77$) and that this correlation is significantly greater than zero ($p < .001$). Therefore we reject the null hypothesis.
+
+> A positive correlation was observed between students' body height and shoe size (r=.77, p<.001, one-tailed).
+
+Now that we know that there is a positive relationship, it would also be very informative to know how strong this relationship is. Which line or curve would best describe the positive association in the scatterplot above? This is a question about the statistical model. 
+
+
+# Linear regression
+
+In this section we will regard the observed data as a combination of `model` and `error`. The `model` part is the variation in the data that we try to explain or understand, using predictors and theories, while the remaining or residual part is `error` or unexplained variation in the data. 
+
+Data = model + error. 
+
+## Intercept-only model
+
+We start out with a very simple model (see Session Three), viz. one without any predictors. The only predictor (in the `model` part) is the mean of the dependent variable Y:
+
+$y_i = 1 \bar{Y} + \epsilon_i$
+
+```{r m0}
+mean(students$shoesize) # 39.50
+sd(students$shoesize) # 2.27
+m0 <- lm( shoesize ~ 1, data=students ) # 1 denotes intercept
+# help(lm) for background
+summary(m0)
+```
+
+We can see here that the value of the intercept ($\bar{Y}$) is indeed equal to the sample mean of shoe size.
+And the standard deviation of the residuals (of$\epsilon_i$) is indeed equal to the sample standard deviation in shoe size. 
+In other words, this model does not provide any explanation or prediction of shoesize.  
+
+
+## Adding a predictor
+
+To inspect the effect of `height` we add it as a predictor to the `model` part. 
+The first predictor is still the mean of the dependent variable Y, but now we add a second predictor X:
+
+$y_i = 1 \bar{Y} + \beta_1 X_{1i} + \epsilon_i$
+
+
+```{r m1}
+m1 <- lm(  shoesize ~ 1+height, data=students )
+summary(m1)
+```
+
+if we add predictor `height` to the model, the value of the intercept changes. It is now the expected value of `shoesize` if `height` is zero. For a person with height zero, the expected shoesize is 3.0.
+
+On the next line of output we find the regression coefficient ($\beta_1$) for `height`. For every unit increase of `height` shoesize will increase by 0.21. Now this is valuable information: for every 5 cm increase in  `height`, the shoesize increases with $5\times0.21 \approx 1$ size unit. 
+When we look at the associated  p value of this coefficient, what can we conclude?
+
+The standard deviation of the residuals (of$\epsilon_i$) is smaller in model m1 (1.446) than in model m0 (2.268). The `model` part of the data has increased and the `error` part has decreased, going  from model m0 to m1. 
+
+The plot below shows the parameter estimates from this regression model. (This plot was created with the package `ggplot2` which we will not discuss further; see `help(ggplot2)` for further information and explanations.) 
+
+```{r}
+require(ggplot2)
+ggplot(students, aes(x=height, y=shoesize)) + geom_point(size=2) +
+  geom_smooth(method=lm, se=TRUE)
+```
+
+
+## Centering the predictor
+
+It is recommended to *center* your predictor(s), that is, to use relative values (relative to the sample mean of your predictor) rather than absolute values (relative to zero). This makes it easier to interpret the effects, especially if multiple predictors are used (which we will not do today).  
+
+The model remains the same. 
+
+```{r m2}
+# make new var height.c
+height.c <- students$height - mean(students$height)
+# and add it as a column (cbind) to the current students data set
+students <- cbind( students, height.c )
+m2 <- lm(  shoesize ~ 1+height.c, data=students )
+summary(m2)
+```
+
+If we add the centered  predictor `height.c` to the model, the value of the intercept does not change, relative to the intercept-only model: it is in fact the expected value of  `shoesize` if centered `height.c` is zero, i.e., if the student's  height equals the average height in the sample.  
+For a person with average height (and hence `height.c`=0), the expected shoesize is 39.5. 
+
+Note that the results and conclusions regarding the effect of `height` on `shoesize` remain unchanged between model m1 (height uncentered) and m2 (height centered). 
+
+
+## Next: Machine Learning
+
+So far we have fitted the regression model and assessed the fit of the regression model on the same data. But we might also use only a part of the data for developing the regression model ("learning" or "training" the model from the data), and then use the remaining part of the data for assessing the accuracy of the prediction from the model ("testing" the model on new data). This is typically what we do in Machine Learning and such computer-based applications. 
+
+For splitting the data set, see 
+https://www.r-bloggers.com/2021/12/how-to-split-data-into-train-and-test-in-r/
+
+We use 0.7 of the data for training, and 0.3 for testing. 
+
+```{r ml}
+# training data
+set.seed(2022) # make reproducible example
+testfraction <- 0.3 # trainfraction 0.7 
+thesplit <- sample( c(rep(0,(1-testfraction)*nrow(students)),   # 0=train
+                      rep(1,(testfraction)*nrow(students)) ) )  # 1=test
+table(thesplit)
+train <- students[ thesplit==0, ]
+test <- students[ thesplit==1, ]
+```
+
+```{r ml-2}
+m3 <- lm( shoesize~1+height.c, data=train ) # model m3 based on train data
+summary(m3) # based on N=78 obs
+```
+
+Next, we use model `m3` (which is based on the train data) to `predict` the outcome value for a new data set, the test data.
+If the model m3 performs well, then the outcomes predicted (along X) should be close to the actual outcomes (along Y), i.e., close to the purple dashed line. 
+
+```{r ml-3}
+m3fit <- predict(m3, newdata=test) # fitted on unseen test data
+plot( m3fit, test$shoesize, pch=16,
+      xlab="Predicted shoesize", ylab="Observed shoesize",
+      main=paste("test set (n=",nrow(test),")",sep=""),
+      col=ifelse(test$sex=="Female","red","blue"))
+abline( a=0, b=1, lty=2, lwd=2, col="purple" ) 
+```
+If we compare the predictedd shoesize (along X) with the observed shoesize (along Y) we see that the model m3 does not predict the shoesizes perfectly (the observations are spread around the purple line), although the model does explain part of the variation in shoe size. 
+
+The color coding suggests that it might be helpful to include sex as a predictor, as well as the interaction between sex and height.
+
+```{r ml-4}
+mean( test$shoesize-m3fit )
+sd( test$shoesize-m3fit )
+sd( test$shoesize )
+```
+
+The residuals (deviations between predicted and observed values) have a standard deviation of 1.5, which is smaller than the standard deviation of the outcome in the test sample ($s=2.2$). Thus the model m3 has learned something useful about the variation in shoesize.
+
+We could repeat this procedure multiple times, with different random splits of train and test data, and with averaging over the results of these multiple analyses.  
+
+
+
+
+# Solutions to exercises
+
+```{r exercise-4-2}
+# qqnorm( students$height, datax=TRUE, col="blue" )
+# qqline( students$height, datax=TRUE, col="purple", lty=2)
+# students <- students[ -23, ] # remove row 23
+```
