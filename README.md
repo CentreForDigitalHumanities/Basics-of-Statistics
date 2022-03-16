@@ -5,5 +5,5 @@ This repository contains materials for a one-day training course on Basics of St
 
 2021.10.07: Course taught on 7 Oct 2021, in the Living Lab Digital Humanities, Utrecht University.
 
-2021.03.03: Course was to be taught on 3 March 2022, but is postponed due to personal circumstances. 
+2021.03.03: Course was to be taught on 3 March 2022, but has been postponed to 18 March 2022. 
 
