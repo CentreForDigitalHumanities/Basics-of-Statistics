@@ -228,7 +228,6 @@ Remove any outlier(s).
 
 ```{r}
 # your R code goes here
-students <- students[ -23, ] # for knitting
 ```
 
 ## Visual inspection
@@ -242,8 +241,8 @@ plot( students$height, students$shoesize,
 ```
 
 Every dot represents one student's height (X axis) and shoe size (Y axis). (Note that dots may fully overlap each other without us noticing, in this scatterplot.)
-Looking at the dots in this graph we may see a positive trend in the data: as X increases, so increases Y). 
-To test whether this trend is significant, we run a correlation test using the `cor.test` function. In a correlation test, a correlation coefficient *r* is computed (this expresses the trend and amount of correlation, between -1 and +1). The H0 is that $r=0$. 
+Looking at the dots in this graph we may see a positive trend in the data: as X increases, so increases Y. 
+To test whether this trend is significant, we run a correlation test using the `cor.test` function. In a correlation test, a correlation coefficient *r* is computed (this expresses the trend and amount of correlation, between -1 and +1). The H0 claims that $r=0$. 
 
 ```{r}
 cor.test( students$height, students$shoesize,
@@ -255,7 +254,7 @@ From the results we may conclude that there is a positive correlation ($r = .77$
 
 > A positive correlation was observed between students' body height and shoe size (r=.77, p<.001, one-tailed).
 
-Now that we know that there is a positive relationship, it would also be very informative to know how strong this relationship is. Which line or curve would best describe the positive association in the scatterplot above? This is a question about the statistical model. 
+Now that we know that there is a positive relationship, it would also be very informative to know more details about this relationship. Which line or curve would best describe the positive association in the scatterplot above? This is a question about the statistical model. 
 
 
 # Linear regression
@@ -296,7 +295,7 @@ m1 <- lm(  shoesize ~ 1+height, data=students )
 summary(m1)
 ```
 
-if we add predictor `height` to the model, the value of the intercept changes. It is now the expected value of `shoesize` if `height` is zero. For a person with height zero, the expected shoesize is 3.0.
+if we add predictor `height` to the model, the value of the intercept changes. It is now the expected value of `shoesize` if `height` is zero. For a person with height zero, the expected shoesize is 2.8.
 
 On the next line of output we find the regression coefficient ($\beta_1$) for `height`. For every unit increase of `height` shoesize will increase by 0.21. Now this is valuable information: for every 5 cm increase in  `height`, the shoesize increases with $5\times0.21 \approx 1$ size unit. 
 When we look at the associated  p value of this coefficient, what can we conclude?
@@ -327,7 +326,7 @@ m2 <- lm(  shoesize ~ 1+height.c, data=students )
 summary(m2)
 ```
 
-If we add the centered  predictor `height.c` to the model, the value of the intercept does not change, relative to the intercept-only model: it is in fact the expected value of  `shoesize` if centered `height.c` is zero, i.e., if the student's  height equals the average height in the sample.  
+If we add the centered  predictor `height.c` to the model, the value of the intercept does not change, relative to the intercept-only model: it is in fact the expected value of  `shoesize` if centered `height.c` is zero, i.e., if the student's height equals the average height in the sample.  
 For a person with average height (and hence `height.c`=0), the expected shoesize is 39.5. 
 
 Note that the results and conclusions regarding the effect of `height` on `shoesize` remain unchanged between model m1 (height uncentered) and m2 (height centered). 
@@ -355,7 +354,7 @@ test <- students[ thesplit==1, ]
 
 ```{r ml-2}
 m3 <- lm( shoesize~1+height.c, data=train ) # model m3 based on train data
-summary(m3) # based on N=78 obs
+summary(m3) # based on N=77 obs
 ```
 
 Next, we use model `m3` (which is based on the train data) to `predict` the outcome value for a new data set, the test data.
@@ -369,7 +368,7 @@ plot( m3fit, test$shoesize, pch=16,
       col=ifelse(test$sex=="Female","red","blue"))
 abline( a=0, b=1, lty=2, lwd=2, col="purple" ) 
 ```
-If we compare the predictedd shoesize (along X) with the observed shoesize (along Y) we see that the model m3 does not predict the shoesizes perfectly (the observations are spread around the purple line), although the model does explain part of the variation in shoe size. 
+If we compare the predicted shoesize (along X) with the observed shoesize (along Y) we see that the model m3 does not predict the shoesizes perfectly (the observations are spread around the purple line), although the model does explain part of the variation in shoe size. 
 
 The color coding suggests that it might be helpful to include sex as a predictor, as well as the interaction between sex and height.
 

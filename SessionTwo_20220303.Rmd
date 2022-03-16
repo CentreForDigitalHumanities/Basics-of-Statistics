@@ -287,8 +287,6 @@ Remember to use the `url` function to specify the `file` argument.
 The resulting data frame should be named `students`. Inspect the numbers of rows and columns. 
 
 ```{r exercise-2-2}
-students <- read.csv( 
-  file=url( "https://www.hugoquene.nl/R/students.csv") )
 ```
 
 ---
