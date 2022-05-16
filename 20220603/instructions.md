@@ -53,7 +53,7 @@ Quené, H. & van den Bergh, H. (2022). Quantitative Methods and Statistics (Chap
 
 We are still busy preparing the materials that we will use during the training; please await further instructions for these files. 
 
-* https://github.com/hugoquene/CDH-BOS/blob/main/students.csv
+* https://github.com/CentreForDigitalHumanities/Basic-of-Statistics/blob/main/students.csv
 
 We look forward to see you next week! 
 
@@ -89,8 +89,14 @@ Using R code, determine the dimensions, row names, and column names of the data 
 
 Change the working directory for your R session to the particular directory created for this course (see "Prepare your laptop" section above, step 3). Check the working directory. Using the command `dir()`, check the contents of the working directory. Double-check with the "Files" tab in the lower right panel of RStudio. 
 
-### Q6 (p.20) Download the file `FruitData.csv` from the repository for this course:
-	https://github.com/hugoquene/CDH-BOS/blob/main/FruitData.csv (right-click, Save as...)
+### Q6 (p.20) 
+
+Download the file `FruitData.csv` from the repository for this course:
+
+https://github.com/CentreForDigitalHumanities/Basic-of-Statistics/blob/main/FruitData.csv
+
+(right-click, Save as...)
+
 and save it on your computer in the working directory for this course. Then read the CSV file into your R session, as shown on p.20. 
 
 ### Q7 (p.22 bottom) 
