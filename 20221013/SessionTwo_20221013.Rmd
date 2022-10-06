@@ -1,0 +1,615 @@
+---
+title: 'Basics of Statistics: Session Two'
+author: "Hugo Quen&eacute;, h.quene@uu.nl, www.hugoquene.nl"
+date: "`r Sys.Date()`"
+output:
+  html_document: default
+  pdf_document: default
+encoding: UTF-8
+---
+
+--- 
+The following specs only work if knitr has been installed! 
+---
+```{r set-options, include=FALSE}
+# only relevant when knitting the document
+options(width = 80)
+knitr::opts_chunk$set(
+  cache = FALSE,
+  comment = NA,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+## Introduction
+
+Welcome! You are now reading a so-called R MarkDown file [or its output], containing
+
+* explanations and descriptions and comments, and 
+
+* R commands (input), typically on a shaded background, and 
+
+* R output, generated on-the-fly [or after 'knitting' the entire document]. 
+
+The current working directory is *`r getwd()`* on this computer.
+
+If you are reading this file in RStudio, you can send a "chunk" or "snippet" of R input command(s) to the R engine, by pressing the small green Play-like button ▶ in the upper right corner of the chunk below. Try it out by click on the green ▶ symbol below.
+```{r runchunk}
+# this is an example of a chunk, containing a single R command
+Sys.Date() # retrieve and print today's date
+```
+The output of the R chunk will be inserted just below the chunk.
+
+Below, we will demonstrate the basic workings of R. 
+
+We are assuming that you have worked your way through Chapter 2 (A Short Introduction to R, pp.7-24) of this book:
+
+Arnold, T. & Tilton, L. (2015). _Humanities Data in R_. Cham: Springer.
+<https://link-springer-com.proxy.library.uu.nl/book/10.1007/978-3-319-20702-5>
+
+First, however, let's make sure that everything is readable. If you are reading the R Markdown file in RStudio, you may want to zoom in, using Rstudio > View > Zoom In.
+
+
+## Key features of R+Rstudio
+
+- R resembles Unix, not Windows.
+
+- In its basic form (R only), you type input commands in the Console window. There is no point-and-click graphical user interface. However, RStudio provides a working environment "around" basic R, so that RStudio takes care of a lot of administrative chores. 
+
+- R is object-oriented. Data, functions, routines, and results are objects handled by other methods. For example, an operation may produce an analysis (e.g. of class "htest") that you may save, print, pipe to other operations, etc. Examples will follow below. 
+
+- There is no `Undo` operation. 
+
+- R has strict syntax and semantics. 
+
+
+## Objects
+
+R works with objects. 
+Look in the upper right pane of RStudio, and click on the Environment tab. 
+At the start of the session, the environment is empty.
+There are no objects (of any kind) in the current R session yet. 
+Let's create the first object, named `a` (without the quotes).
+```{r create-object-a}
+a <- 1:25
+1:25 -> a # same
+```
+Now we have an object named `a` in the working environment, and that's it. No other output! 
+Object `a` contains a sequence of integer (whole) numbers from 1 to 25.  
+Let's inspect the object, i.e. let R print the content of object `a`. By default, output is sent to the Console window and/or captured in the current R MarkDown document. 
+```{r print-object-a}
+print(a) # show contents of object a, starting with first element
+```
+The output starts with the first element of `a`, indicated by [1]. This is handy if the output covers multiple lines:
+```{r print-object}
+print( sample.int(50) ) # print a random sample of 50 integer numbers 1..50
+```
+
+Because `print` is the default action for an object, we could also just type the name of an object, without any command, in order to print that object. 
+```{r default-object-a}
+a # typing object name is equivalent to print(a)
+```
+
+This trick allows us to use R as a pocket calculator: create a number on-the-fly, and R's default action is to print the resulting object (outcome number).
+```{r as-calculator}
+17*23 # use R as calculator: print the resulting (unnamed) numerical object
+# everything after the hash on a line is a comment 
+```
+As you can see in the Environment tab, the resulting object is not saved, i.e. it is lost. 
+
+Standard operators are `+-*/^` --- and please mind your parentheses! 
+```{r mind-parentheses}
+((a*a)+1) # default priority
+(a*(a+1)) # nondefault priority 
+```
+
+Warning: Everything in R is case-sensitive. `X` and `x` are different objects. 
+
+Warning: do NOT use `c` or `t` as names for your own objects. 
+`c` and `t` happen to be predefined functions in R, which you can no longer use if you replace the predefined functions by your own objects. Not good. 
+
+OK. Now let us create another NUMERICAL variable. 
+```{r overwrite-object}
+x <- 1:5  # shorthand for seq(1,5,by=1)
+x <- rep(x,each=2) # there is no Undo command, previous x is lost!
+```
+Now there should be a single object named `x` in the environment -- check in the upper right panel.
+Let's have a closer look at that object. 
+As explained in Session One, we are going to find the `mean` and `sd` of object `x`, using the functions named `mean` and `sd` that are pre-defined in R. 
+```{r inspect-object-x}
+x # or print(x), prints all values of object `x`
+mean(x) # returns a single number, mean of all values of `x`
+sd(x) # returns a single number, sqrt(20/9), 
+# the std. dev. of all values of `x`
+summary(x) # print a numerical summary
+```
+The summary of a numerical variable consists of the minimum and maximum, Q1 and Q3 values, median and mean, in the above order. The standard deviation is not always appropriate and therefore it is not part of the numerical summary. 
+We will come back to the standard deviation later! 
+
+Next, we create a CATEGORICAL variable, also known as a factor. 
+```{r create-object-xf}
+xf <- as.factor(x) 
+```
+The summary of a factor is appropriately different from the output of a numerical variable: 
+```{r summary-object-xf}
+summary(xf) # print factor summary
+```
+This is because R is sensitive to the type (`class`) of an object. 
+
+```{r summary-region}
+aux <- rep( c("West","Mid","North","South"), each=2 )
+region <- as.factor(aux) # convert character to factor
+summary(region) # note that factor levels are in alphabetical order!! 
+```
+The summary of a factor is like a table, listing the *numbers* (counts, frequencies) of occurrences of each value. 
+
+Note: by default, the values or `levels` of the factor are processed and reported in *alphabetical* order. 
+
+Let's see how we can remove or delete (an) object(s):
+```{r rm-1}
+rm(aux,region) # rm means remove 
+```
+
+Next, we create a BOOLEAN or LOGICAL variable, consisting of only the values TRUE and FALSE.
+```{r create-b}
+b <- (x>4) # returns TRUE if (x>4) and returns FALSE otherwise
+class(b) # what is the `class` or `kind` or `type` of `b?  
+print(b) # or just b, to print all values
+```
+
+Boolean or logical operators we will need are:
+`==` (equal), `!=` (not equal), `&` (and), `|` (inclusive OR).
+
+For completeness sake, there is a convenient command to print a list of all objects in the environment. If given without argument between the parentheses, then it just lists all objects. With appropriate arguments, the resulting list can be limited to particular environments (oh yes, there can be multiple environments) and/or to particular object names.
+```{r objects}
+objects() # list all objects
+```
+
+> Homework Q3 (p.13): Try and explain the following R code and its output:
+```{r Q3}
+vectorObj <- 1:5
+logicalObj <- as.logical( c(1,1,0,1,0) ) # 0=FALSE 1=TRUE
+vectorObj[ logicalObj ]
+```
+
+## Data frames
+
+A data frame is like a worksheet in Excel or SPSS. It has rows of observations, and columns of variables. We can construct a data frame in multiple ways. 
+
+### by combining variables
+
+```{r build-data-frame}
+xxf <- data.frame( x, xf ) # bind variables as columns into data frame = worksheet
+head(xxf) # show first n lines of data frame
+tail(xxf) # show last n lines of data frame
+str(xxf) # show structure of data frame
+```
+
+### read from file
+
+The file can be anywhere on your computer or even on the web as long as it is accessible. 
+
+It's easiest to read spreadsheet data from a file saved in CSV format (comma separated values), using the command `read.csv`. A CSV file can be produced by MS Excel and many other programs (File, Save As, choose CSV format).
+
+For more complex situations, `read.table` provides more flexibility. 
+
+[You can also use an add-on package named `readxl` to import MS Excel files directly into R; more about add-on packages later]. 
+
+In R, missing data typically have the value `NA` (not available). 
+
+> Homework Q6 (p.20): Download the file `FruitData.csv` from the repository for this course: \\
+  <https://github.com/CentreForDigitalHumanities/Basic-of-Statistics/blob/main/FruitData.csv> (right-click, Save as...) \\
+and save it on your computer in the working directory for this course. Then read the CSV file into your R session, as shown on p.20. 
+
+If your preparation has gone well, then you have already downloaded the file `FruitData.csv` from the course repository to your local working directory, see Q6 above. 
+One possible way to read the file into a data frame is as follows:
+
+```{r read-table}
+wd <- getwd() # local working directory
+fn <- "FruitData.csv" # file name
+if (file.exists(fn)) {
+  FruitData <- read.csv(fn) 
+} else paste("File",fn,"not found in",wd)
+```
+
+
+### use a dataset predefined in R 
+
+R has thousands of add-on packages, and many of these contain interesting data sets that we can use. Here I pick one of my own, to work with in this session. 
+```{r datasets}
+if (require(hqmisc))
+  data(talkers)
+```
+The command `data` loads the dataset `talkers` (which can be found in the package `hqmisc`) into the working environment. 
+
+
+### Data frame dimensions and indices
+
+The cells of a data frame are indexed by row and column numbers, in that order, given between square brackets, and separated by a comma. 
+If an index for rows and/or for columns is missing, then all rows in the specified column(s), or all columns in the specified row(s), are returned. 
+
+```{r print-dataframe-elements}
+FruitData[1,] # print row 1, all columns
+FruitData[,1] # print all rows, column 1
+FruitData[,2:4] # print all rows, columns 2 to 4
+```
+
+It is wise to always **double-check** whether the data frame does have the correct numbers of rows and columns, using the `dim` (for *dimensions*) command:
+```{r dim}
+dim(FruitData) # double-check dimensions of rows and columns
+```
+
+> See also homework Q4. 
+
+The **columns** of a data frame can be accessed not only by the column NUMBER but also by the column NAME, using the `$` separator between data frame and column name:
+```{r dollar}
+FruitData[,3] # print third column
+FruitData$Color # print column named `Color`
+```
+
+
+---
+
+## Help
+
+For each command, and for each data set, helpful explanation is available in multiple ways: 
+First, under the Help tab in the lower right panel. 
+Second, by typing `help(abc)` or `?abc` in the Console, in the lower left panel.  
+```{r help}
+## type `?talkers` in the Console window
+## type `?sd` in the Console window
+```
+
+---
+
+## Exercise 1: create variable
+
+Now it's your turn to create a variable from scratch. 
+The variable should be named `y` and it should contain the numbers from 17 to 43, in consecutive order. Use the example chunks above. Inspect the result.
+```{r exercise-2-1}
+# create y
+# inspect y
+```
+
+
+## Exercise 2: read data frame
+
+In this exercise you're going to read or import a data set from a web location. 
+We will continue working today with this dataset. 
+
+The web location of this data set is <https://www.hugoquene.nl/R/students.csv> .
+
+As suggested by the file extension, these data are in CSV format, so we are going to use the command `read.csv` for this. Consult the help information for this command. 
+
+Remember to use the `url` function to specify the `file` argument. 
+
+The resulting data frame should be named `students`. Inspect the numbers of rows and columns. 
+
+```{r exercise-2-2, echo=FALSE}
+```
+
+---
+
+## Subsetting (Ch.2.5)
+
+Subsetting is a very powerful mechanism in R. 
+
+Above we have already used square brackets to refer to the elements of a variable or of a data frame. 
+
+Within the square brackets, we can not only use index numbers, but we can also use logical conditions that evaluate to being either TRUE or FALSE. This turns out to be super practical, for example if you want to select only values within a particular range, for further processing.
+
+```{r subsetting}
+# variable `y` should have been created by you, in exercise 2-1 above
+y <- 17:43
+y[ 1:5 ] # first five elements of your variable y created above
+y[ (y>=30 & y<40) ] # values within particular range
+data(talkers) # activates hmisc::talkers dataset
+isold <- talkers$age>45 # create a logical or boolean variable
+mean( talkers$age[isold] ) # mean of age of OLD speakers 
+length( talkers$age[isold] ) # number of OLD speakers 
+```
+
+We might use this to create subsets of the data, meeting certain criteria, for closer inspection. Note that it is statistically wiser, however, to keep all the data together in a large data set.
+
+## Exercise 2-3: subsetting
+
+Create two subsets of the `talkers` data frame: one named `western` containing speakers from the West region, and one named `nonwestern` containing speakers from other regions. Use the logical operators mentioned above. Also use the help information on the `talkers` data set to check how the regions have been coded. 
+
+```{r exercise-2-3}
+```
+
+
+## Tables
+
+We use tables in several ways. 
+First we use them to count the numbers of cases in categories of a categorical variable (factor):
+```{r table-1}
+data( talkers )
+table( talkers$region )
+with( talkers, table(region) ) # same
+```
+
+Note the alphabetical order of the factor values (the values of a factor are also called "levels").
+
+Second, we use tables to CROSS-tabulate the numbers of cases broken down by two or more categorical variables (factors), e.g. by sex AND region:
+```{r table-2}
+with( talkers, table(sex,region) )
+## xtabs( ~sex+region, data=talkers ) # similar
+```
+Note that with tables, as with data frames, the first dimension specifies the rows and the second dimension specifies the columns. Always. 
+
+Aside: We could even cross-tabulate by more than two variables, but the results will be more difficult to interpret.  
+
+
+## Save your work 
+
+Well done! 
+We wish to save the fruits of our labour from the computer's memory to its hard disk or network disk. This can be done in various ways. 
+
+* We can save the (edited) R Markdown file. Click on the file's tab, then File > Save As. 
+
+* We can save the input commands and output from the Console window (lower left pane, Console tab). Open a new R Script file (File > New File > R Script). Click on the Console tab in the lower left pane. Select the lines from the Console that you want to save, then Edit > Copy. 
+Go to the newly created R script file (upper left pane), then Edit > Paste the selected lines, and File > Save As the newly created file. Note that the resulting file contains a mix of R commands and R output. 
+
+* We can save a particular object:
+```{r save-object}
+save(a, file="a.Rdata" ) # save the object into a file
+mylasta.12_23 <- load( file="a.Rdata" ) # load the file contents into R, using the object name stored in the file
+```
+Repeat for the objects that you wish to save. 
+
+By default, R reads and writes in a user-settable working directory. 
+The current working directory (when compiling this Rmarkdown file) is *`r getwd()`*.
+If you use R Markdown, then the default working directory is the one containing the R Markdown file.
+
+
+* We can save a particular object as a table-like file that can be read by other software. This is most often done with data frames. 
+```{r write-table}
+write.table( xxf, file="xxf.txt", row.names=F, col.names=T ) # with column headers
+require(foreign) # load package `foreign` if not done already
+write.csv( xxf, file="xxf.csv" ) # can be imported into MS Excel or into SPSS
+```
+
+* We can save the entire environment, containing **all** objects visible in the Environment tab in the upper right pane. From the RStudio main menu, choose Session > Save Workspace As... To retrieve the workspace file, choose Session > Load Workspace. This will effectively add all objects from the saved workspace file into your environment. This is a convenient way to save your work, and to continue later with the same environment. 
+
+* We can save the history of all R input commands passed on from RStudio to R. Go to the History tab in the upper right pane, and press the *Save history into file* button with a floppy disk icon. 
+
+---
+
+## Principle 1
+
+> Observed data vary, randomly and systematically.
+
+Systematically: pattern or effect -- but often obscured. 
+
+Randomly: noise, due to sampling variability, measurement errors, and many unknown sources of information. 
+
+The pooled effect of random variation typically result (for mathematical reasons) in a "normal" or "gaussian" distribution of random error. 
+
+> In large samples, errors tend to cancel out each other, so that errors tend to "disappear" and the patterns tend to become more noticeable. 
+
+This is exemplified here by throwing a virtual and fair die, 30 times. Each of the six possible outcomes has 1/6 probability of being observed. We inspect the outcomes and produce a table, as well as a barchart. 
+
+```{r die-n30}
+set.seed(23) # make reproducible example
+x30 <- round( runif(n=30, min=0.5, max=6.5) ) # simulate 30 throws
+print(x30)
+table(x30)
+barplot( table(x30), xlab="Outcome", ylab="Count" ) # table as input for barplot
+abline( h=30/6, lty="dashed" ) # add horizontal dashed line
+```
+
+With this moderate sample size, random variability results in considerable differences between the expected and observed distribution of outcomes.
+
+## Exercise 2-4
+
+What is the expected mean of the outcome variable `x30`? What is the observed mean or average of the outcome variable `x30`? What is the median outcome value? 
+
+```{r exercise-2-4}
+```
+
+
+## Exercise 2-5
+
+Copy the R code chunk named `die-n30` above, and paste it in the space below. Change the name of the chunk to `exercise-2-5`. 
+
+Adjust the chunk so that the die is thrown not 30 but 3000 times. Do not forget to adjust the name of the outcome variable (wherever it occurs), and the marker line. Compare the results with those of `die-n30`. 
+
+> YOUR CHUNK HERE
+
+
+## Students' body length
+
+The `students` data set (you have already read it into R) contains the body height and shoe size as self-reported by 115 students from three different groups. 
+
+As usual, we start out with exploratory data analysis. We visualize the frequency distribution of the data, using a histogram and a boxplot. 
+A histogram is a visualisation of a frequency table, after "binning" the values. Here we use "bins" with boundaries that are 5 cm apart, so that all values of 120 to 125 are counted in the same bin (with bin midpoint 122.5), as are the values of 125 to 130 (bin midpoint is 127.5), etc. Then we plot the numbers of observations (counts) in each bin. 
+In the histogram we also plot the expected gaussian distribution, using the mean and standard deviation extracted from the data themselves, using a purple dashed line. 
+
+```{r students-height}
+with(students, hist( height,
+                     breaks=nclass.FD, 
+                     xlab="Height (cm)", # axes must always be labeled
+                     main="Students' height (N=115)" ) ) -> students.hist
+curve( dnorm(x, mean=mean(students$height),
+             sd=sd(students$height) ) * 115*5, # multiply by N * binwidth
+       add=TRUE, lty="dashed", col="purple", lwd=2 )
+with(students, boxplot( height, horizontal=TRUE,
+                        outpch=16, outcol="red", outcex=2, # highlight outliers
+                        xlab="Heigth (cm)" ) ) -> students.boxplot # save results
+# add explanatory text 
+text( students.boxplot$stats[1,1], 0.8, "lower\nwhisker", adj=0.5 )
+text( students.boxplot$stats[2,1], 1.3, "Q1", adj=0.5 )
+text( students.boxplot$stats[3,1], 0.7, "Q2\nmedian", adj=0.5 )
+text( students.boxplot$stats[4,1], 1.3, "Q3", adj=0.5 )
+text( students.boxplot$stats[5,1], 0.8, "upper\nwhisker", adj=0.5 )
+```
+
+Here we see that the lower outlier is very far from the bulk of the observations, and this observation requires either further inspection (perhaps there really was a student with extremely short height, does the researcher remember?) or removal (perhaps it was an input error). The upper outliers may be genuine observations, as they are closer to the bulk. 
+
+In exploratory data analysis (EDA) we often compare the observed (frequency) distribution of the data with some expected (probability) distribution. In this case, we compare it with the normal or gaussian distribution. 
+
+Here we **subset**, again by means of **[ ]**, only those values of `height` that are *above* the lower whisker (abbreviated to `LW` for convenience): 
+```{r select-longer-students}
+(LW <- students.boxplot$stats[1,1]) # compute and print
+select1 <- students$height>=LW # is height greater than or equal to LW ? T or F
+## exercise: 
+## inspect and interpret the logical variable `select1`, using `table`
+```
+
+We can compare the observed and expected distributions by visual means. R is especially good at this. 
+
+The command `qqnorm` plots data agains a normal (a.k.a. gaussian) distribution. If the data are indeed normally distributed, they should be on an approximately straight line in the resulting graph. In the plot below, the observed values are along the horizontal axis. 
+
+```{r qqnorm}
+qqnorm( students$height, datax=T ) 
+qqline( students$height, datax=T, col="purple", lwd=2 ) 
+```
+
+Indeed the bulk of the data is normally distributed along the purple line. 
+There are two outliers on the higher side (to the right), but these are relatively close to the purple line and to the bulk of the data. 
+There is a single outlier in the lower left corner, for which the observed value (along X) is far lower than expected from a normal distribution (along Y). In this sample, finding a shortest person of about 150 cm would be "normal", but finding a  person of 105 cm is "abnormal". This observation is indeed a suspect outlier. 
+
+---
+
+## Assignment 2-6
+
+Perform additional exploratory analyses on the various variables in data set `students`. Take the measurement level of each variable into account. 
+
+
+---
+
+## Additional examples of EDA 
+
+### EDA Example 2
+
+First we create a non-gaussian variable, these could be fictitious response times.
+```{r eda-2-1}
+y <- rgamma(1000,shape=2,scale=3)*100
+```
+
+Let's explore the data:
+```{r eda-2-2}
+hist(y)
+boxplot(y, horizontal=TRUE)
+# fivenum(y) # min, Q1, median, Q3, max
+```
+
+Next, we follow the same steps as in Example 1 above: 
+```{r eda-2-3}
+UW <- boxplot.stats(y,coef=3)$stats[5] # Upper Whisker
+ok <- ( y < UW) # create logical selector variable, using UW
+# QQ plot
+qqnorm( y, datax=TRUE, ylab="Observed values", xlab="Expected Z values")
+qqline( y, col="purple", datax=TRUE, lwd=2) # QQ plot
+abline( v=mean(y)+c(-1,0,1)*sd(y), col="grey", lty=2 ) # vertical grid lines
+abline( h=c(-1,0,1), col="grey", lty=2 ) # horizontal grid lines
+text(1750,-2, paste("mean(y)=",format(mean(y),digits=1),", sd(y)=",format(sd(y),digits=1), sep="") )
+```
+
+
+### EDA Example 3
+
+First we create a non-gaussian variable, these could again be fictitious response times.
+```{r eda-3-1}
+y2 <- (rnorm(1000,150,30)^2)/25 # create y2 which is not normally distributed
+```
+
+The two plots will contain two graphical summaries of the data. 
+```{r eda-3-2}
+# first plot
+hist( y2, prob=T ); rug( y2, col="darkblue", side=3); # TWO commands separated by ;
+lines( density(y2), col="darkblue", lty=2, lwd=2) # add line to graph
+# second plot
+qqnorm( y2, pch=16, cex=0.7); qqline( y2, col="red", lwd=2)
+```
+
+Indeed, two different numerical tests for normality both reject the H0:y~N(937,358) with very small _p_ values -- this will be explained further in Session Three. 
+```{r eda-3-3}
+shapiro.test(y2) 
+ks.test(y2,rnorm) # specify distribution to compare against
+```
+
+---
+
+Solutions are at the end of this file! 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## SOLUTIONS TO EXERCISES
+
+<!-- BEGIN SKIP for compilation 
+
+```{r solution-2-1}
+# create y
+y <- 17:43
+# inspect y
+print(y)
+length(y) # equals 43-17+1
+```
+
+
+
+
+
+
+
+
+```{r solution-2-2}
+students <- read.csv( file=url("https://www.hugoquene.nl/R/students.csv") )
+```
+
+
+
+
+
+
+
+
+```{r solution-2-3}
+western <- talkers[ talkers$region=="W", ] # select rows of talkers data set
+nonwestern <- talkers[ talkers$region!="W", ] # select rows of talkers data set
+```
+
+
+
+
+
+
+
+
+```{r solution-2-4}
+mean(x30)
+median(x30)
+mad(x30)
+```
+
+
+
+
+
+
+
+
+```{r solution-2-5}
+set.seed(23) # make reproducible example
+x3000 <- round( runif(n=3000, min=0.5, max=6.5) ) # simulate 3000 throws
+print(x3000)
+table(x3000)
+barplot( table(x3000), xlab="Outcome", ylab="Count" ) # table as input for barplot
+abline( h=3000/6, lty="dashed" ) # add horizontal dashed line
+```
+
+END SKIP for compilation -->
