@@ -1,4 +1,4 @@
-# Basic of Statistics
+# Basics of Statistics
 One-day course on Basics of Statistics for Humanities researchers, [Centre for Digital Humanities](https://github.com/CentreForDigitalHumanities/), [Utrecht University](https://github.com/enterprises/university-utrecht)
 
 This repository contains materials for a one-day training course on Basics of Statistics, intended for scholars and teachers in the Humanities. The course is provided by the [Centre for Digital Humanities](https://github.com/CentreForDigitalHumanities/) at [Utrecht University](https://github.com/enterprises/university-utrecht), and was/will be taught by [Hugo Quené](https://github.com/hugoquene) and [Kirsten Schutter](https://github.com/iamkirsten).
