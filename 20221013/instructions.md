@@ -17,15 +17,15 @@ There will be more participants than computers in the room, so we kindly ask you
 
 1. Install R from www.R-project.org (Download, full installation for your computer)
 
-2. Install RStudio from www.Rstudio.com (Download, Desktop Free version for your computer)
+2. Install RStudio from https://posit.co/products/open-source/rstudio (scroll down, choose Desktop Free version)
 
 3. Create a separate folder on your computer for this training, 
-e.g. C:\\Hugo\\BS2022 (Windows) or ~/Hugo/BS2022 (Mac)
+e.g. C:\\Hugo\\BS2023 (Windows) or ~/BS2023 (Mac)
 
 4. Start RStudio. The program will show four panels, each with multiple tabs. Go to the lower left panel, and click on the Console tab. 
 
 5. In the Console panel, copy+paste the following command after the ">" prompt: 
-   source(file=url("https://www.hugoquene.nl/R/BS20220303prepare.R"))
+   source(file=url("https://www.hugoquene.nl/R/EMLAR2023prepare.R"))
 This script will install additional packages in R, and will report details of your installation. The script will produce output in the same Console panel. Regular output is in black, warnings and errors are in red. 
 
 6. If you are using a UU laptop, and if you encounter problems while installing R or RStudio or the additional packages (step 5), then please consult the following troubleshooting guide:
@@ -46,7 +46,7 @@ Please also answer the questions at the bottom of this document, while working y
 
 2. Also before the training, please read through Chapter 2 of this online textbook:
 
-Quené, H. & van den Bergh, H. (2022). Quantitative Methods and Statistics (Chapter 2). Open textbook, available at https://hugoquene.github.io/QMS-EN/ch-research.html .
+Quené, H. & van den Bergh, H. (2022). Quantitative Methods and Statistics (Chapter 2). Open textbook, available at https://hugoquene.github.io/QMS-EN/ch-research.html. The textbook also contains instructions on how to "do" statistics with R. 
 
 
 ## Materials during the training
@@ -55,12 +55,13 @@ We are still busy preparing the materials that we will use during the training; 
 
 * https://github.com/CentreForDigitalHumanities/Basic-of-Statistics/blob/main/students.csv
 
-We look forward to see you next week! 
+We look forward to seeing you soon! 
 
 With kind regards, 
 
-Hugo Quené	
-h.quene@uu.nl	
+Hugo Quené and Kirsten Schutter
+
+{h.quene|k.schutter}@uu.nl	
  
 --- 
  
