@@ -5,6 +5,7 @@ This repository contains materials for a one-day training course on Basics of St
 
 | Date | Comments | Materials |
 | ------------- |:-------------| :----- |
+| [2023.05.15](https://cdh.uu.nl/events/cdh-workshop-basics-of-statistics-hands-on-training-day-for-humanities-staff-2/) | Course to be taught on 15 May 2023, in the Living Lab Digital Humanities, Utrecht University. | [folder 20230515](https://github.com/hugoquene/CDH-BOS/tree/main/20230515) |
 | [2022.10.13](https://cdh.uu.nl/events/cdh-workshop-basics-of-statistics-hands-on-training-day-for-humanities-staff/) | Course to be taught on 13 Oct 2022, in the Living Lab Digital Humanities, Utrecht University. | [folder 20221013](https://github.com/hugoquene/CDH-BOS/tree/main/20221013) |
 | [2022.06.03](https://cdh.uu.nl/events/basics-of-statistics-hands-on-training-day-for-humanities-teachers-researchers-june-3/) | Course taught on 3 June 2022, in the Living Lab Digital Humanities, Utrecht University. | [folder 20220603](https://github.com/hugoquene/CDH-BOS/tree/main/20220603) or [zipfile 20220603](https://github.com/hugoquene/CDH-BOS/tree/main/20220603/BOS20220603.zip) |
 | [2022.03.18](https://cdh.uu.nl/events/basics-of-statistics-hands-on-training-day-for-humanities-teachers-researchers-march-18/) | Course was to be taught on 3 March 2022, but has been postponed to 18 March 2022. | [20220303](https://github.com/hugoquene/CDH-BOS/tree/main/20220303) |
