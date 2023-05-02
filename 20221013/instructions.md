@@ -25,7 +25,9 @@ e.g. C:\\Hugo\\BS2023 (Windows) or ~/BS2023 (Mac)
 4. Start RStudio. The program will show four panels, each with multiple tabs. Go to the lower left panel, and click on the Console tab. 
 
 5. In the Console panel, copy+paste the following command after the ">" prompt: 
+
    source(file=url("https://www.hugoquene.nl/R/EMLAR2023prepare.R"))
+
 This script will install additional packages in R, and will report details of your installation. The script will produce output in the same Console panel. Regular output is in black, warnings and errors are in red. 
 
 6. If you are using a UU laptop, and if you encounter problems while installing R or RStudio or the additional packages (step 5), then please consult the following troubleshooting guide:
