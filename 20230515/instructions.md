@@ -4,7 +4,7 @@ Thanks for participating in the tutorial on Basics of Statistics. Below we provi
 
 ## Location 
 
-The training will be given "live" in the Living Lab Digital Humanities, which is located inside the University Library, Drift 27, Utrecht, room 0.32. 
+The training will be given "live" in the Digital Humanities Workspace, which is located inside the University Library, Drift 27, Utrecht, room 0.32. 
 (How to find that room? You need to walk past the library desk, past the journals, into the former chapel, turn left, past the book stacks, past the special collections, then turn left just before a flight of stairs downward, first room on the right).
 
 We kindly ask you to check yourself for corona symptoms (and if in doubt to test yourself) before coming to the training. 
