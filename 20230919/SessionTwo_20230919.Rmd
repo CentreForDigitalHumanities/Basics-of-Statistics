@@ -428,6 +428,9 @@ A histogram is a visualisation of a frequency table, after "binning" the values.
 In the histogram we also plot the expected gaussian distribution, using the mean and standard deviation extracted from the data themselves, using a purple dashed line. 
 
 ```{r students-height}
+
+students <- read.csv('https://www.hugoquene.nl/R/students.csv')
+
 with(students, hist( height,
                      breaks=nclass.FD,
                      xlab="Height (cm)", # axes must always be labeled
